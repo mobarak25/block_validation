@@ -12,6 +12,11 @@ class DeleteItem extends CrudEvent {
   const DeleteItem({required this.itemIndex});
 }
 
+class ChangeFild extends CrudEvent {
+  final String changeText;
+  const ChangeFild({required this.changeText});
+}
+
 class AddNewTask extends CrudEvent {
   final String newTask;
   const AddNewTask({required this.newTask});

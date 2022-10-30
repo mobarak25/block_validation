@@ -7,7 +7,7 @@ class CrudScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController textController = TextEditingController();
+    final textController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -45,48 +45,27 @@ class CrudScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  FloatingActionButton(
-                    child: const Icon(Icons.add),
+                  const Text(
+                    "Add your task",
+                    style: TextStyle(fontSize: 20, color: Colors.red),
+                  ),
+                  Text(state.newTaskState),
+                  const SizedBox(height: 20),
+                  TextField(
+                    onChanged: (value) {
+                      bloc.add(ChangeFild(changeText: value));
+                    },
+                    controller: textController,
+                    decoration: InputDecoration(
+                      labelText: "Write something",
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
+                  ),
+                  OutlinedButton(
+                    child: const Text("gg"),
                     onPressed: () {
-                      showModalBottomSheet(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 10,
-                              ),
-                              child: Column(
-                                children: [
-                                  const Text(
-                                    "Add your task",
-                                    style: TextStyle(
-                                        fontSize: 20, color: Colors.red),
-                                  ),
-                                  const SizedBox(height: 20),
-                                  TextField(
-                                    controller: textController,
-                                    decoration: InputDecoration(
-                                      labelText: "Write something",
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                    ),
-                                  ),
-                                  OutlinedButton(
-                                    onPressed: () {
-                                      bloc.add(
-                                        AddNewTask(
-                                            newTask: textController.value
-                                                .toString()),
-                                      );
-                                    },
-                                    child: const Text("Add data"),
-                                  )
-                                ],
-                              ),
-                            );
-                          });
+                      bloc.add(AddNewTask(newTask: state.newTaskState));
                     },
                   )
                 ],
