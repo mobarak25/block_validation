@@ -7,7 +7,7 @@ class CrudScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FocusNode taskNode = FocusNode();
+    final TextEditingController textController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -65,7 +65,7 @@ class CrudScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 20),
                                   TextField(
-                                    focusNode: taskNode,
+                                    controller: textController,
                                     decoration: InputDecoration(
                                       labelText: "Write something",
                                       border: OutlineInputBorder(
@@ -74,7 +74,13 @@ class CrudScreen extends StatelessWidget {
                                     ),
                                   ),
                                   OutlinedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      bloc.add(
+                                        AddNewTask(
+                                            newTask: textController.value
+                                                .toString()),
+                                      );
+                                    },
                                     child: const Text("Add data"),
                                   )
                                 ],
