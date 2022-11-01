@@ -7,14 +7,16 @@ class CrudScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text("Task List"),
-      ),
-      body: SingleChildScrollView(
-        child: BlocProvider(
-          create: (_) => CrudBloc(),
+    final textController = TextEditingController();
+
+    return BlocProvider(
+      create: (_) => CrudBloc(),
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text("Task List"),
+        ),
+        body: SingleChildScrollView(
           child: Center(
             child: BlocBuilder<CrudBloc, CrudState>(
               builder: (context, state) {
@@ -46,12 +48,46 @@ class CrudScreen extends StatelessWidget {
                       ),
                     ),
 
-                    FloatingActionButton(
+                    MaterialButton(
                       onPressed: () {
-                        showModalBottomSheet(
+                        showModalBottomSheet<void>(
                           context: context,
-                          builder: (context) {
-                            return const CustomBottomSheet();
+                          builder: (_) {
+                            return Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Column(
+                                children: [
+                                  const Text(
+                                    "Add your task",
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.red),
+                                  ),
+                                  Text(state.newTaskState),
+                                  const SizedBox(height: 20),
+                                  TextField(
+                                    onChanged: (value) {
+                                      bloc.add(ChangeFild(changeText: value));
+                                    },
+                                    controller: textController,
+                                    decoration: InputDecoration(
+                                      labelText: "Write something",
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                  ),
+                                  OutlinedButton(
+                                    child: const Text("Add"),
+                                    onPressed: () {
+                                      bloc.add(AddNewTask(
+                                        newTask: textController.text,
+                                        fieldController: textController,
+                                      ));
+                                    },
+                                  )
+                                ],
+                              ),
+                            );
                           },
                         );
                       },
@@ -91,56 +127,6 @@ class CrudScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class CustomBottomSheet extends StatelessWidget {
-  const CustomBottomSheet({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final bloc = context.read<CrudBloc>();
-    final textController = TextEditingController();
-
-    return BlocProvider(
-      create: (_) => CrudBloc(),
-      child: BlocBuilder<CrudBloc, CrudState>(builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              const Text(
-                "Add your task",
-                style: TextStyle(fontSize: 20, color: Colors.red),
-              ),
-              Text(state.newTaskState),
-              const SizedBox(height: 20),
-              TextField(
-                onChanged: (value) {
-                  bloc.add(ChangeFild(changeText: value));
-                },
-                controller: textController,
-                decoration: InputDecoration(
-                  labelText: "Write something",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              OutlinedButton(
-                child: const Text("Add"),
-                onPressed: () {
-                  bloc.add(AddNewTask(
-                    newTask: state.newTaskState,
-                    fieldController: textController,
-                  ));
-                },
-              )
-            ],
-          ),
-        );
-      }),
     );
   }
 }

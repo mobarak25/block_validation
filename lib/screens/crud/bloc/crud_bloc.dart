@@ -20,12 +20,12 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
   }
 
   FutureOr<void> _changeFild(ChangeFild event, Emitter<CrudState> emit) {
-    print(state.newTaskState);
     emit(state.copyWith(newTaskState: event.changeText));
+    print(state.newTaskState);
   }
 
   FutureOr<void> _addNewTask(AddNewTask event, Emitter<CrudState> emit) {
-    if (state.newTaskState.isNotEmpty) {
+    if (event.newTask.isNotEmpty) {
       emit(state.copyWith(
           copyCrudList: List.from(state.crudList)..add(event.newTask)));
       event.fieldController.clear();
