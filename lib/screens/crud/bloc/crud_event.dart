@@ -19,5 +19,6 @@ class ChangeFild extends CrudEvent {
 
 class AddNewTask extends CrudEvent {
   final String newTask;
-  const AddNewTask({required this.newTask});
+  final TextEditingController fieldController;
+  const AddNewTask({required this.newTask, required this.fieldController});
 }

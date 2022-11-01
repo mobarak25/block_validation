@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -19,12 +20,15 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
   }
 
   FutureOr<void> _changeFild(ChangeFild event, Emitter<CrudState> emit) {
+    print(state.newTaskState);
     emit(state.copyWith(newTaskState: event.changeText));
   }
 
   FutureOr<void> _addNewTask(AddNewTask event, Emitter<CrudState> emit) {
-    print(event.newTask);
-    emit(state.copyWith(
-        copyCrudList: List.from(state.crudList)..add(event.newTask)));
+    if (state.newTaskState.isNotEmpty) {
+      emit(state.copyWith(
+          copyCrudList: List.from(state.crudList)..add(event.newTask)));
+      event.fieldController.clear();
+    }
   }
 }
